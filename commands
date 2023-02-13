@@ -1,0 +1,55 @@
+create a mysql container running detached 
+docker run --name mysql1 -e MYSQL_ROOT_PASSWORD=123456789 -v /home/ucem/mysql-data:/var/lib/mysql -d  mysql:5.7
+
+create a mysql client running attahed 
+ docker run -it --rm mysql:5.7 mysql -u root -p123456789 -h 172.17.0.2
+ 
+ postgres - container volume directory 
+ /var/lib/postgresql/data
+ 
+ docker run --name postgres1 -e POSTGRES_PASSWORD=123456789 -d postgres
+ 
+ docker run -it --rm postgres psql -h -ip-container -U postgres 
+ 
+ 
+ WITH POSTGRES
+  docker ps
+    2  docker inspect postgres1
+    3  docker run -it --rm postgres psql -h 172.17.0.3 -U postgres
+    4  history
+    5  docker ps
+    6  docker docker ps
+    7  docker ps
+    8  docker rm -f postgres1
+    9  docker ps
+   10  docker run --name postgres1 -e POSTGRES_PASSWORD=123 -d postgres
+   11  docker ps
+   12  docker rm -f postgres1
+   13  pwd
+   14  cd postgres-data/
+   15  pwd
+   16  docker run --name postgres1 -e POSTGRES_PASSWORD=123 -v /home/ucem/postgres-data:/var/lib/postgresql/data -d postgres
+   17  docker inspect postgres1
+   18  docker run -it --rm postgres psql -h 172.17.0.3 -U postgres
+   19  history
+   
+   
+   VOLUMES 
+   -docker run --name mysql1 -e MYSQL_ROOT_PASSWORD=123456789 -v mysql-data:/var/lib/mysql -d  mysql:5.7
+   
+   //para borrar contenedores con volumenes - v 
+   docker rm -fv $(docker ps -aq)
+    
+    POSTGRES WITH VOLUMES 
+    -docker run --name postgres1 -e POSTGRES_PASSWORD=123 -v postgres-data:/var/lib/postgresql/data -d postgres
+    -docker run -it --rm postgres psql -h -ip-container -U postgres
+    
+    
+    CREATE A gninx container running with volumes - shared volume with an apache server (httpd)
+    docker run --name gninx1 -v /home/ucem/html:/usr/share/nginx/html -p 8080:80 nginx:1.23.3
+    
+    httpd with volume 
+    docker run -d --name apache1  -p 8090:80 -v /home/ucem/html:/usr/local/apache2/htdocs/ httpd:2.4.55
+    
+    
+    
