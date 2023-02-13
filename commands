@@ -51,5 +51,10 @@ create a mysql client running attahed
     httpd with volume 
     docker run -d --name apache1  -p 8090:80 -v /home/ucem/html:/usr/local/apache2/htdocs/ httpd:2.4.55
     
+    create volumes 
+    docker volume create prueba1
+    
+    delete dangling volumes 
+    docker volume ls -f dangling=true
     
     
