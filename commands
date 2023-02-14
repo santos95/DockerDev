@@ -58,3 +58,30 @@ create a mysql client running attahed
     docker volume ls -f dangling=true
     
     
+    DOCKER NEWTWORKS 
+    docker network ls 
+    docker network inspect bridge
+    docker network create red1
+    docker network ls 
+    --shows all networks 
+    
+    Definir el driver 
+    -docker network create --driver bridge --subnet 182.18.0.0/16 red2
+    -docker network rm red2
+    
+    -docker network connect red1 ubuntu_red2_1 
+    docker inspect ubuntu_rede2_1
+    docker exec ubuntu_red1_1 ping ubuntu_red2_1
+    ahora que se onecto a la red1 permite ping a entre red1 y 2
+    
+    para desconectarlo de la red2
+     docker network disconnect red1 ubuntu_red2_1
+    docker network create --driver bridge --subnet 182.18.0.0/16 red2
+    
+    docker network create redmine-network 
+    docker run -d --name some-postgres --network some-network -e POSTGRES_PASSWORD=secret -e POSTGRES_USER=redmine postgres
+    docker run -d --name some-redmine -p 3000:3000 --network some-network -e REDMINE_DB_
+    
+  docker run -d --name redmine-postgres-newtork -p 3000:3000 --network redmine-network -e REDMINE_DB_POSTGRES=postgres-network -e REDMINE_DB_USERNAME=redmine -e REDMINE_DB_PASSWORD=123 redmine
+    
+    
