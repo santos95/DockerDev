@@ -1,0 +1,143 @@
+redes definen la forma en que se comunican los contenedores 
+por defecto usa la red bridge 
+ docker network create red1
+ 
+ docker network create --driver bridge --subnet 18.1.-0-0/16
+ 
+ docker network rm red1
+ 
+ da error el borrar si hay contenederores activos conectados a la red 
+ 
+ docker compuse realiza los comandos en lugar de ser a mano
+ manera facil y versionable 
+ mapear redes, volumenes y eso 
+ para levantar x o y aplicaciones - siguiente n pasos 
+ y asi poder manipular y controlar diversos servicios 
+ 
+ 
+ DOCKER COMPOSE 
+ -TOOL TO DEFINE AND EXECUTE DOCKER APPLICATION FROM MANY CONTAINERS OR ONLY ONE CONTAINER - SERVICES 
+ 
+ -USE AN YAML FILE TO CONFIGURE THE SERVICES 
+ -WITH ONLY ONE COMMAND WE CAN LUNCH THE APPLICATION WITH ALL THE SERVICES AND THEIR CONFIGURATION 
+  AND START ALL THE SERVICES 
+  
+  DOCKER COMPOSE FOR NGINX
+  WITH DOCKER RUN WE CREATE A NGINX CONTAINER WITH THIS:
+  docker run -d -p 80:80 nginx 
+  
+  WITH DOCKER COMPOSE WE CREATE A DIRECTORY 
+  -mkdir docker-compose
+  
+  por defecto dockercompose.yaml 
+  
+  si tenemos varios yaml usamos el -f para especificar uno 
+  por defecto toma el docker-compose.yaml
+  
+  --lo primero en el archivo yaml 
+  version: '3.8
+  luego viene el servicio 
+  se especifica un nombre 
+  se especifica la imagen 
+  y se mape el puerto 
+  
+  docker compose up - crear y levantar contenedores y redes 
+  docker compose ps - para listar contenedores 
+  dockercompose down - para bajar y eliminar contenedores 
+
+docker-compose.yaml
+  
+  version: '3.8'
+services:
+  web: 
+    image: nginx:1.23.3
+    ports: 
+      - "80:80"
+
+ se ejecuta el comando 
+ -docker compose up 
+ -crea el contenedor, crea la red y si hubiese volumenes los mapea y permite mapear volumenes
+ 
+ si se ejecuta el -docker compose down 
+ se elimina el contenedor y la red 
+ 
+ 
+ --------------------------------------------
+ ahora para trabajarlo con un dockerfile 
+ se cambia el image del docker-compose con build - hace uso de la imagen que se quiere definir
+ en este caso build: . 
+ 
+ docker-compose.yaml
+ 
+ version: '3.8'
+services:
+  web: 
+    build: .
+    ports: 
+      - "80:80"
+
+
+Dockerfile
+FROM nginx:1.23.3
+
+COPY index.html /usr/share/gninx/html
+
+un index.html con texto 
+
+
+-para automaticamente con el down eliminar las imagenes 
+-docker compose down --rmi local 
+elimina solo la imagen utilizada 
+este elimina la imagen, el contenedor y la red 
+
+
+--para levantar un servicio postgres
+version: '3.8'
+services:
+  postgres: 
+    image: postgres
+    environment:
+      - POSTGRES_PASSWORD=123
+      - POSTGRES_USER=redmine
+
+
+-docker compose up 
+
+
+volumen no se borra por defecto 
+se debe poner -v para borrar los volumenes declarados asi como el --rmi para las imagenes
+docker compose down -v
+
+sin nada borra los contenedores y la red, mientras que para el volumen y la imagen se debe especificar 
+
+los contenedores tambien con el compose se pueden asociar a la red 
+utilizar nombre de red para mayor legibilidad y ademas conectar otros contenedores a la red 
+
+
+-politicas de reinicio 
+si el servicio esta instalado directamente en la maquina si se reinicia el servidor se puede especificar que se reinicie el servicio 
+igualmente se puede realizar algo similar de las politicas de reinicio para el docker-compose
+
+por defecto los contenedores no se reinician automaticamente 
+opcion - always  
+--restart always - siempre va a reiniciar el contenedor si se detiene 
+ejemplo cuando el docker deamon se reinicia 
+version: '3.8'
+services:
+  postgres: 
+    image: postgres
+    restart: always
+    environment:
+      - POSTGRES_PASSWORD=123
+      - POSTGRES_USER=redmine
+    volumes:
+      #- $PWD/data:/var/lib/postgresql/data
+      - postgres:/var/lib/postgresql/data
+    networks:
+      - redmine-network
+volumes:
+  postgres:
+networks:
+  redmine-network: 
+
+
