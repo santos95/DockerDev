@@ -84,4 +84,40 @@ create a mysql client running attahed
     
   docker run -d --name redmine-postgres-newtork -p 3000:3000 --network redmine-network -e REDMINE_DB_POSTGRES=postgres-network -e REDMINE_DB_USERNAME=redmine -e REDMINE_DB_PASSWORD=123 redmine
     
+    --------------------------------
+    version: '3.8'
+services:
+  registry:
+    image: registry:2
+    restart: always
+    ports:
+      - 5000:5000
+    volumes:
+      - registry-data:/var/lib/registry
+volumes:
+  registry-data:
+  
+  
+  
+    docker tag nginx:1.23.3 172.31.7.69:5000/nginx
+    docker push 172.31.7.69:5000/nginx
+    
+    {
+  "builder": {
+    "gc": {
+      "defaultKeepStorage": "20GB",
+      "enabled": true
+    }
+  },
+  "experimental": false,
+  "features": {
+    "buildkit": true
+  },
+   "insecure-registries":["http://192.168.10.136:5000", "http://172.31.7.69:5000"]  
+   
+   -- here api - give a response with the images in the local registry 
+   http://172.31.7.69:5000/v2/_catalog
+   http://172.31.7.69:5000/v2/nginx/tags/list
+   
+}
     
