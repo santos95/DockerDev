@@ -1,0 +1,32 @@
+version: '3.9'
+services:
+  joomla:
+    image: joomla
+    restart: always 
+    links:
+      - joomla-db:mysql
+    environment:
+      JOOMLA_DB_HOST: joomla-db
+      JOOMLA_DB_PASSWORD: joomla 
+      JOOMLA_DB_NAME: joomla 
+      JOOMLA_DB_USER: joomla
+    ports:
+      - 9000:80 
+    networks:
+      - joomla-network
+  joomla-db:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+      MYSQL_DATABASE: joomla
+      MYSQL_USER: joomla
+      MYSQL_PASSWORD: joomla
+    volumes: 
+      - joomla-db:/var/lib/mysql
+    networks:
+      - joomla-network
+volumes:
+  joomla-db:
+networks:
+  joomla-network:

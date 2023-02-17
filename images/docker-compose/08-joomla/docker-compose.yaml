@@ -1,0 +1,30 @@
+version: '3.8'
+services:
+  redmine:
+    image: joomla
+    restart: always
+    links:
+      - joomladb:mysql
+    environment:
+      JOOMLA_DB_HOST: joomladb 
+      JOOMLA_DB_PASSWORD: example
+    ports:
+      - 9000:80
+    networks:
+      - joomla-network
+
+  joomladb:
+    image: mysql:5.7
+    restart: always
+    environment: 
+      MYSQL_ROOT_PASSWORD: example
+    volumes:
+      - mysql:/var/lib/mysql
+    networks:
+      - joomla-network 
+volumes:
+  mysql: 
+networks:
+  joomla-network:
+
+

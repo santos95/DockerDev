@@ -1,0 +1,24 @@
+version: '3.8'
+services:
+  sw-api-app:
+    build: . 
+    restart: always
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/app 
+    networks: 
+      - sw-net
+  mongodb:
+    image: mongo
+    volumes:
+      - mongodb-data:/data/db
+    networks:
+      - sw-net
+networks:
+  sw-net:
+volumes:
+  mongodb-data:
+
+
+
