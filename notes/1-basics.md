@@ -2,7 +2,7 @@
 
 ## images - blueprint - the code and the tools (enviroment) required to run the application. 
 
-## the containers are created based on images. We can have one image, and from that image we can have many containers running in the same server or in many servers. When we build an image, we prepare all what we need to run our application, and the container is the actual running unit of sowtfare builded with the code and the enviroment.
+## the containers are created based on images. We can have one image, and from that image we can have many containers running in the same server or in many servers. When we build an image, we prepare all what we need to run our application, and the container is the actual running unit of software builded with the code and the enviroment.
 
 ## So, containers, are running instances of images. We can have public images, pre-build or existing images and custom images. The public images are supported by the community and the companies behind the specifics tecnologies. The custom, are created for use, and contains all what we need to run our application with all what we need to do that, even using pre-built images to built our own images. 
 
@@ -36,7 +36,7 @@ CMD  [ "node", "app.js" ]
 
 ### The docker file starts with the FROM command, that refers to an image to use it as base image to build our own image. In this case refers to a node image, and this node image, if not exists locally, is pulled from the docker hub or from our own registry. When a image is pulled, is stored locally, cached locally. 
 
-### The COPY command, has to parameters, the fist one, refer to the path in our system, referying to a folders, subfolders and files in our system to be copied into the image. The second one refer to a path inside the image, where the files will be copied. So this COPY . ., copy all the folders, subfolders and files in our workdir, in this case where the docker files is, to the image. So the first one, is the path in our system where exists the folders and files to be copied to the image and the second one, the path into the image where the folders and files will be copied.
+### The COPY command, has two parameters, the fist one, refer to the path in our system, referying to a folders, subfolders and files in our system to be copied into the image. The second one refer to a path inside the image, where the files will be copied. So this COPY . ., copy all the folders, subfolders and files in our workdir, in this case where the docker files is, to the image. So the first one, is the path in our system where exists the folders and files to be copied to the image and the second one, the path into the image where the folders and files will be copied.
 
 ### The RUN command, will executed the specified command into the image, but, relative to the working directory. Remember, the image (containers) has their own file system, detached from the system where you are curring setting up the docker file. So, the run command, will run in this case, in the root folder. All the commands will run relative to the root, to change that, we can use the WORKDIR command, which specified the working directory, and all the next command will run relative to the workdir. 
 
