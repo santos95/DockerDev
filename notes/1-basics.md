@@ -157,3 +157,18 @@ COPY . /app
 # execute the app with the python executable
 CMD ["python", "rng.py"]
 
+### if we run a container based on this image we will not be able to input the required data for this app. 
+docker run 98bacdd3b1df
+
+#### even when the default behavior of the run command is attached to the container, the default behavior do not take into account the STDIN, so we are not able to input data to the container. So, we need to pass to options, the -i interactive mode, which keep the stdin open, allowing the input something to the container, and the -t option, which creates a terminal, combined with the -i, we can input something, the container is listening for some input and we have a terminal expose by the container, where we can enter the input.
+docker run -it 98bacdd3b1df
+
+#### so, what happen if we try to restart this container, because, for this applications once the application runs, done and the containers is shut down (exited). if we start the container without any option, will run in background and will not exite.
+docker start exciting_williamson 
+
+docker stop exciting_williamson 
+
+#### to fix this behavior we can add the -a option to attach the container, but will not work well beacuse is not in interactive mode, which means the STDIN will not keep open, so once we enter a value will close the STDIN and the app will crash.
+docker start -a exciting_williamson 
+#### for this case we have to add the -i option, to keep the STDIN open
+docker start -a -i exciting_williamson 
