@@ -75,6 +75,14 @@
     kubectl rollout status deployment/sortiz-first-app
     kubectl rollout undo deployment/sortiz-first-app
 
+#### to see the history of our deployments - shows the deployment history - we can see the different deployments. And to see the details about any of them the second command 
+    kubectl rollout history deployment/sortiz-first-app
+    kubectl rollout history deployment/sortiz-first-app --revision=5 
+
+##### to go back to a specific versioin 
+    kubectl rollout undo deployment/sortiz-firt-app --to-revision=1
+    
+
 
 
 
