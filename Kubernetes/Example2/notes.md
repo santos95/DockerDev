@@ -86,3 +86,44 @@
 
 
 
+### Declarative approach - using a configuration file
+#### in the configuration file, has to be yaml, in that we specify how the deployment will be configured. 
+##### In the file we can configure any type of resource, deployment, service and so on. 
+##### Which api version to use we can search - 
+###### api version - we can use the apps/v1
+###### kind - the kind of object we want to configure - for deployment - indicates that we want to configure and create a deployment 
+    kind: Deployment
+###### metada - to set some required data, like the name of the deployment  
+metadata:
+    name: second-app-deployment
+
+###### spec - specification of the deployment - set how will be configured 
+###### For this example give some info like replicas, container and so on 
+###### Inside the template we set the image configuration - below template, we specify a new object, in this case a pod object, so for that we have to define metada for him
+spec:
+    replicas: 1
+    template:
+        metadata:
+            labels:
+                app: second-app
+        spec:
+            containers:
+                - name: second-app
+###### by default replicas is set to 1
+###### within template - be define the pod that should be created - in the templete of a deployment, always is used to define a pod, so for that, is not necessary to define a kind which the value of pod
+###### after template metadata, we require to define the specification of the inviduals for the deployment that we are defined, The first spec is for the overall deployment and this for the pod 
+###### the second spec - define how the pod should be created - so we define one type of pod for a deployment, if we want different types of pods we required other deployments, if we have n replicas we have n equals deployments running a container based on the same image.
+###### containers key - allows us to define which containers or the single container that should be part of the pod that we are defining. We can define n containers, so remember that a pod can have a group of related containers running. So we can list containers - So containers key allows us to define the container or group of containers that should be part of our pod
+###### if we require multiple containers we can define like this - using "-" to specify the different list of containers required.
+spec:
+            containers:
+                - name: first-app-container1
+                  image: image1
+                - name: first-app-container2
+                  image: image2
+###### name - So, every container then can have a name - name        
+###### image - specify the image that we want to use as we did in the imperative aprouch - kubectl create deployment deployment-name --image=image-name1, image-name2, ... 
+
+###### selector - key concepts in the declaraive aproch
+#### to create the deployment - apply a config file to the cluster
+kubectl apply -f=deployment.yaml

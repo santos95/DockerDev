@@ -1,0 +1,17 @@
+apiVersion: apps/v1 
+kind: Deployment 
+metadata: 
+  name: sortiz-second-app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sortiz-second-app 
+  template: 
+    metadata:
+      labels:
+        app: sortiz-second-app 
+    spec: 
+      containers:
+        - name: sortiz-second-app 
+          image: supermendax95/sortiz-kube-first-app:v3
