@@ -82,10 +82,6 @@
 ##### to go back to a specific versioin 
     kubectl rollout undo deployment/sortiz-firt-app --to-revision=1
     
-
-
-
-
 ### Declarative approach - using a configuration file
 #### in the configuration file, has to be yaml, in that we specify how the deployment will be configured. 
 ##### In the file we can configure any type of resource, deployment, service and so on. 
@@ -112,7 +108,7 @@ spec:
 ###### by default replicas is set to 1
 ###### within template - be define the pod that should be created - in the templete of a deployment, always is used to define a pod, so for that, is not necessary to define a kind which the value of pod
 ###### after template metadata, we require to define the specification of the inviduals for the deployment that we are defined, The first spec is for the overall deployment and this for the pod 
-###### the second spec - define how the pod should be created - so we define one type of pod for a deployment, if we want different types of pods we required other deployments, if we have n replicas we have n equals deployments running a container based on the same image.
+###### the second spec - define how the pod should be created - so we define one type of pod for a deployment, if we want different types of pods we required other deployments, if we have n replicas we have n equals pods running a container based on the same image.
 ###### containers key - allows us to define which containers or the single container that should be part of the pod that we are defining. We can define n containers, so remember that a pod can have a group of related containers running. So we can list containers - So containers key allows us to define the container or group of containers that should be part of our pod
 ###### if we require multiple containers we can define like this - using "-" to specify the different list of containers required.
 spec:
@@ -127,3 +123,59 @@ spec:
 ###### selector - key concepts in the declaraive aproch
 #### to create the deployment - apply a config file to the cluster
 kubectl apply -f=deployment.yaml
+
+###### if everything is all right we will have the deployment running
+###### in the config file - the selector with in the spec of the deployment and 
+###### also the labels within the metadata labels for the template (pod)
+###### is very importa, because that tells to kubernetes which pods will be managed
+###### or will be part of the specific deployment. 
+###### So - selector - match lables - indicates that the pods that have 
+###### metadata - labels that match will be part of the deployment, will be 
+###### controlled by the deployment - Tells to the deployment which pods will be part of them
+
+###### selectors - allow to specify which other resources will be controlled or connected with the specific resource.
+
+
+##### service yaml - config file - similar to the deployment config file
+###### apiVersion: v1 - is just v1
+###### kind: - specify that this is a service kind - because kubernetes ignore the doc file name, specify the type throug the kind
+###### metadata: name: define the name that we want to give to the service
+###### spec - into the specification - we define the service that we want to create - define and configure the service
+###### spec -> selector - the selector here is more flexible that the deployment selector
+###### THe selector defines which resources will be controlled or will be part/connected with a specific resource - here, which pods will be controller or be part of the service - services exposes pods
+###### Selector - works a bit different - service resources are older, the selector is simple and only support match label, for that 
+###### we only defines the label value pair directly without specifying that we use matchlabel as the deployment. 
+###### For here, if we have more labels, may be tho labels deployment, but 
+###### one similar in varios deployments and we can set that this service 
+###### will control all pods with that specific pais even if has more - is that flexible.
+apiVersion: v1
+kind: Service
+metadata:
+    name: sortiz-second-app-service
+spec:
+    selector:
+        app: second-app
+    ports:
+        - protocol: 'TCP'
+          port: 80
+          targetPort: 8080 # this is that the container expose (utilize)
+        - protocol: 'TCP'
+          port: 20017
+          targetPort: 20017
+    type: LoadBalancer
+
+    
+###### so, with the selector specified about, we tell to kubernetes that
+###### this service will expose or group to expose all the pods of a deployment that has the app: second-app label.
+
+###### to specify how the service will expose the pods - in the imperative
+###### we define the port and the type (loadBalancer, NodePort...)
+###### ports - we can list a list of ports to expose - we define the protocol, the port that we want to expose (machine port) and the port inside the container (map the external with the interla port)
+
+###### type - we specify how the service will expose the pods #
+###### ClusterIP - default - internally expose ip - accessible inside only
+###### NodePort - Expose on the ip and port of the worker node in which run
+###### LoadBalancer - Utilizes the load balancer of the cluster, to get an address accesible outside to make reachable the service and pods exposed by services and distribution of incoming traffic
+
+
+
