@@ -14,4 +14,10 @@ spec:
     spec: 
       containers:
         - name: sortiz-second-app 
-          image: supermendax95/sortiz-kube-first-app:v3
+          image: supermendax95/sortiz-kube-first-app:v4
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080 
+          env:
+            - name: TZ
+              value: "America/Managua"

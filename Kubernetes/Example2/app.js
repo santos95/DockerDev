@@ -18,6 +18,14 @@ app.get('/kenobi', (req, res) => {
   `);
 });
 
+app.get('/vader', (req, res) => {
+  res.send(`
+    <h1>Hey Darth!</h1>
+    <p>I am going to destroy you Obi wan!!!!</p>
+    <p>Try sending a request to /error and see what happens</p>
+  `);
+});
+
 app.get('/error', (req, res) => {
   process.exit(1);
 });
