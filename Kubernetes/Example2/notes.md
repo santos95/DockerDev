@@ -106,7 +106,7 @@ spec:
             containers:
                 - name: second-app
 ###### by default replicas is set to 1
-###### within template - be define the pod that should be created - in the templete of a deployment, always is used to define a pod, so for that, is not necessary to define a kind which the value of pod
+###### within template - be define the pod that should be created - in the templete of a deployment, always is used to define a pod, so for that, is not necessary to define a kind which the value of pod.
 ###### after template metadata, we require to define the specification of the inviduals for the deployment that we are defined, The first spec is for the overall deployment and this for the pod 
 ###### the second spec - define how the pod should be created - so we define one type of pod for a deployment, if we want different types of pods we required other deployments, if we have n replicas we have n equals pods running a container based on the same image.
 ###### containers key - allows us to define which containers or the single container that should be part of the pod that we are defining. We can define n containers, so remember that a pod can have a group of related containers running. So we can list containers - So containers key allows us to define the container or group of containers that should be part of our pod
@@ -145,9 +145,9 @@ kubectl apply -f=deployment.yaml
 ###### THe selector defines which resources will be controlled or will be part/connected with a specific resource - here, which pods will be controller or be part of the service - services exposes pods
 ###### Selector - works a bit different - service resources are older, the selector is simple and only support match label, for that 
 ###### we only defines the label value pair directly without specifying that we use matchlabel as the deployment. 
-###### For here, if we have more labels, may be tho labels deployment, but 
+###### For here, if we have more labels, may be two labels deployment, but 
 ###### one similar in varios deployments and we can set that this service 
-###### will control all pods with that specific pais even if has more - is that flexible.
+###### will control all pods with that specific pair even if has more - is that flexible.
 apiVersion: v1
 kind: Service
 metadata:
@@ -170,7 +170,7 @@ spec:
 
 ###### to specify how the service will expose the pods - in the imperative
 ###### we define the port and the type (loadBalancer, NodePort...)
-###### ports - we can list a list of ports to expose - we define the protocol, the port that we want to expose (machine port) and the port inside the container (map the external with the interla port)
+###### ports - we can list a list of ports to expose - we define the protocol, the port that we want to expose (machine port) and the port inside the container (map the external with the internal port)
 
 ###### type - we specify how the service will expose the pods #
 ###### ClusterIP - default - internally expose ip - accessible inside only
@@ -193,3 +193,10 @@ spec:
     kubectl delete -f service.yaml
     kubectl delete -f service.yaml -f deployment.yaml
 
+
+#### merge files into a single one
+##### Previously we have a file for a deployment and one for a service.
+##### We can have a single file that contains the configuration of both. 
+##### So we can have a single files that contains the instruction to create and manage automatically the worload that we need.
+##### So we separate the specif object kind with --- indicating that next coming a new object. So in that way we can separate the service and deployment section
+##### Finally, it's recommended to create a service first and then a deployment, so, services keep analyzing the pods that are created and deleted, so it can detect new pods that containes the selector label that match to add that new pod into the service - Join that pod into the group of pod that are exposed by the service.
