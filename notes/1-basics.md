@@ -137,6 +137,41 @@ docker logs -f container_id
 #### To start a stopped container in attach mode we can:
 docker start -a container_id
 
+#### clear and remove containers  - the container has to be stopped to be removed
+    docker rm container_id
+    docker rm [container_id, container_id, ...]
+
+#### clear and remove images
+#### list all images
+    docker images 
+#### to remove and image - if a container that use one of the images that we want remove that will generate an error - 
+#### so images that belongs to a running/stopped container can't be removed - to remove it we have to remove the container first
+    docker rmi image_id
+#### to remove all unused images we have the next command - remove dangling images - which are refer to images that are not associated with any tagged repository
+#### so, this command is used to remove unused images from the docker enviroment 
+#### by default, the docker image prune only remove dangling images (images that are not associated with a tagged reposotory (are not tagged) and 
+#### images that are not referenced by a container)
+    docker image prune
+#### to remove all images that are not referenced by any container (used by a running container) add the -a (--all) flag
+    docker image prune -a 
+
+#### so, docker image prune will remove all dangling images and with the flag -a will remove dangling and unused
+
+#### to list dangling images 
+    docker images -f "dangling=true"
+
+#### to list running containers
+    docker ps 
+#### to list running/stopped containers add the flag -a 
+    docker ps -a
+#### to remove a container used the docker rm command and to remove all containers
+    docker rm $(docker ps -aq)
+
+#### a easy way to remove a container - we can set a container to be removed automatically when it finish or exits with the --rm flag
+    docker run -it --rm python-ap
+    
+
+
 
 
 
