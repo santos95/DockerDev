@@ -13,26 +13,29 @@ spec:
         app: story-app
     spec:
       containers:
-        - name: story-app-container
+        - name: story-app
           image: supermendax95/story-app-data-demo:v2
           volumeMounts: 
             - mountPath: /app/story
               name: story-volume
       volumes:
         - name: story-volume
-          emptyDir:  {}
+          hostPath:
+            path: /data
+            type: DirectoryOrCreate
+
 
 ---
 
 apiVersion: v1 
 kind: Service
 metadata:
-  name: story-app-service
+  name: story-app-service 
 spec:
   selector:
     app: story-app
   ports:
     - protocol: 'TCP'
       port: 80
-      targetPort: 3000
+      targetPort: 3000 
   type: LoadBalancer
