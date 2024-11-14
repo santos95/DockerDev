@@ -83,3 +83,56 @@
 volumes:
         - name: shared-data
           hostPath: {}
+
+### Persistent volumes 
+#### the persistent volumes allow us to make our data independent from the pods and event the nodes.
+#### So in that way we can persist our data even again pods removal and recreation, allowing also to have pods into different nodes sharing specific data, allowing to persist that data - allowing to have a pod been created in any node and also n replicas read/write into the same specific storage location, in that way persist data beyond pods and nodes. 
+### As deployment and services and many thins in kubernete, persistent volumes are resources 
+### To define and use persitent volumes in our pods we need to define two resources 
+### The persistent volume - this is a resource that defines the kind of storage - the sysadmin provition a resource that we use to create this resource, with a purpose and specific behavior to take care of specific storage scenarios
+### the persistent volume claim - this kind of resource claims or request for a specific kind of persitent volume - define the requirements for a persistent volumes
+### once we have the persistent volume and the persistent volume claim, we use the persistent volume claim in our pods specification to allow the use of persistent volumes in our pods and in that way persist our data beyond pods and nodes specifics.
+
+
+
+### Persistent volume - a way to manage storage resources independently of a individual pods - allows to persist data beyond the pods lifecycle - persist after pods restart, delete and reschedule on a different node - is a way to abstract or decople storage from nodes allowing to persist data beyound pods and nodes.
+
+#### persistent volumes are cluster-wide resources - are not bound to any specific pod or namespace - are available for any pod and resource on a namespace
+
+#### create a persistent volume 
+apiVersion: v1
+kind: PersistentVolume
+metada:
+    name: host-pv
+spec:
+    capacity:
+        storage: 1Gi
+    volumeMode: Filesystem
+    accessModes:
+        - ReadWriteOnce
+    volumeMode
+    hostPath:
+        path: /data
+        type: DirectoryOrCreate
+
+#### as any other resource in kubernete we define the apiversion and the kind of resource, we give a name and define the specification, for this case for a dev-practice enviroment we use the hostPath, that will allow to create a detached volume resourced from any pod, but in this case not from nodes (in practice, this practice the esentials can work from any other type of full detached from pods and nodes type)
+#### persistent volumes is not like normal volumes - for this we have to define other parameters
+#### the capacity - set the overall available capacity of the persistent volume - define how much capacity can provide this volume to the different pods running that claims storage capacity from this volume 
+#### to set the capacity - capacity key value - storage key value
+spec:
+capacity:
+    storage: 4Gi
+volumeMode: Filesystem
+AccessModes:
+    - ReadWriteOnce
+
+#### indicates that up of 4Gi can be claimed and used by this hostPath volume
+#### volumeMode - define different storageTypes - Block Storage and Filesystem (this is not just for kubernete is global)
+#### AccessModes - the different type of access mode - the way in how this volume will be claimed and used for pods - this set how this volume will be allowed to be claimed - three types (ReadWriteOnce, ReadOnlyMany, ReadWriteMany) - we can set one or many (or even all) - which mean when we create and use a volumeClaim in which we define what kind of accessMode volume we need and set for our pods to claim - we set how the running app in the pod will use this volume 
+#### ReadWriteOnce - can be mounted as read-write by a single node (one or multiple pods in the same node)
+#### ReadOnlyMany - can be mounted or claimed as read only by a multiple node
+#### ReadWriteMany - can be mounted or claimed as read-write by a multiple nodes (one or many pods from multiple nodes can claim and use this volume)
+
+#### this have to be checked if is available for the kind of persitentVolume that we are creating - for hostPath only the ReadWriteOnce is available
+
+#### different pods can use the same persisten volume, but to use it, we need a resource - persistent volume claim
