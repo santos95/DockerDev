@@ -14,10 +14,19 @@ spec:
     spec:
       containers:
         - name: story-app
-          image: supermendax95/story-app-data-demo:v2
+          image: supermendax95/story-app-data-demo:v3
           volumeMounts: 
             - mountPath: /app/story
               name: story-volume
+          env:
+            - name: STORY_FOLDER
+              valueFrom: 
+                configMapKeyRef:
+                  name: data-store-env
+                  key: folder
+            # define a STORY_FOLDER: "story" enviroment variable
+            #- name: STORY_FOLDER
+            #  value: "story"
       volumes:
         - name: story-volume
           persistentVolumeClaim:
