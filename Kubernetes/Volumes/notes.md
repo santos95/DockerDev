@@ -125,7 +125,6 @@ spec:
     volumeMode: Filesystem
     accessModes:
         - ReadWriteOnce
-    volumeMode
     hostPath:
         path: /data
         type: DirectoryOrCreate
@@ -176,7 +175,7 @@ AccessModes:
 
 #### for the pv and pvc we have to define the storageClassName that define how the PV and PVc will be provisioned dynamically by kubernete
 #### tell to kubernete how to manage and automate the provision of persistent storage resources like PV
-#### define how the will be binding, the provisioner (backend or storage provider), reclaim policy (what happend when the PV is releaded) etc - in the enviroment of dockerdesktop by default the class is defined to work a lab - the standart
+#### define how the will be binding, the provisioner (backend or storage provider), reclaim policy (what happend when the PV is released) etc - in the enviroment of dockerdesktop by default the class is defined to work a lab - the standart
 #### in the PVc is defined to tell kubernete (request) a storage recource that match that class
 
 ##### Similar to other resources we define the api version and the kind

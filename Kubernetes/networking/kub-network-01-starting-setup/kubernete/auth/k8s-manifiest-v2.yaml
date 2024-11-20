@@ -1,0 +1,34 @@
+# creates the userapp deployment and service
+apiVersion: apps/v1 
+kind: Deployment
+metadata:
+  name: auth-app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: auth-app
+  template:
+    metadata:
+      labels:
+        app: auth-app 
+    spec:
+      containers:
+        - name: auth-app-container
+          image: supermendax95/kube-demo-auth:v1
+          imagePullPolicy: IfNotPresent
+
+--- 
+
+apiVersion: v1 
+kind: Service 
+metadata:
+  name: auth-app-service
+spec:
+  selector: 
+    app: auth-app
+  ports:
+    - protocol: 'TCP'
+      port: 80
+      targetPort: 80 
+  type: LoadBalancer
