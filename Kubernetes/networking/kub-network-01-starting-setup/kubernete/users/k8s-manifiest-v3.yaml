@@ -1,0 +1,43 @@
+# creates the userapp deployment and service
+# USE THE ENVIRONMENT VARIABLE CREATED BY KUBERNETE THAT POINTS TO THE HOST OR IP ADDRESS GENERATED AND ASSIGNED FOR THE SERVICE
+
+apiVersion: apps/v1 
+kind: Deployment
+metadata:
+  name: users-app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: users-app
+  template:
+    metadata:
+      labels:
+        app: users-app 
+    spec:
+      containers:
+        - name: users-app-container
+          image: supermendax95/kub-demo-users:v3
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: AUTH_ADDRESS
+              #value: 10.110.253.78 - change for the hostname generate by kubernete
+              value: auth-app-service
+
+--- 
+
+apiVersion: v1 
+kind: Service 
+metadata:
+  name: users-app-service
+spec:
+  selector: 
+    app: users-app
+  ports:
+    - protocol: 'TCP'
+      port: 8080
+      targetPort: 8080 
+  type: LoadBalancer
+
+
+  

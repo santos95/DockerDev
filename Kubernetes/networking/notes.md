@@ -49,3 +49,88 @@ spec:
       port: 8080
       targetPort: 8080 
   type: LoadBalancer
+
+  ### so, between two containers inside a pods or more containers inside a pod we can communicate with each other throug the localhost address. But, what happen in a scenario where we need the communication with containers in different pods and one of them is not publish to the outside world, only inside the cluster.
+  #### so in this way we need a new service for that deployment in which we define a ClusterIp type, so in that way we gives to the pods on his lifecycle an stable ip-address, so in that way we can stablish communication with him inside the cluster 
+
+##### craetes the auth and user api in the same pod - example 1 internal pods communication - FIRST POD
+    # creates the userapp deployment and service
+    apiVersion: apps/v1 
+    kind: Deployment
+    metadata:
+    name: users-app-deployment
+    spec:
+    replicas: 1
+    selector:
+        matchLabels:
+        app: users-app
+    template:
+        metadata:
+        labels:
+            app: users-app 
+        spec:
+        containers:
+            - name: users-app-container
+            image: supermendax95/kub-demo-users:v2
+            imagePullPolicy: IfNotPresent
+            env:
+                - name: AUTH_ADDRESS 
+                #value: localhost - localhost when the communication is inside the same pod - ip address of the service when the communication is between pods
+                valueFrom:
+                    configMapKeyRef:
+                    name: networking-env
+                    key: auth-ip-address
+                    
+    --- 
+
+    apiVersion: v1 
+    kind: Service 
+    metadata:
+    name: users-app-service
+    spec:
+    selector: 
+        app: users-app
+    ports:
+        - protocol: 'TCP'
+        port: 8080
+        targetPort: 8080 
+    type: LoadBalancer
+
+##### SECOND POD - WITH THE SERVICE WITH THE STABLE IP ADDRESS TO BE ABLE TO STABLISH CONNECTION WITH HIM
+
+# creates the userapp deployment and service - in the user we use a env_variable in which we set the ip that the auth-service generates to be accessed inside the cluster
+## we can't access this deployment from outside, only the pods inside the cluster can access.
+    apiVersion: apps/v1 
+    kind: Deployment
+    metadata:
+    name: auth-app-deployment
+    spec:
+    replicas: 1
+    selector:
+        matchLabels:
+        app: auth-app
+    template:
+        metadata:
+        labels:
+            app: auth-app 
+        spec:
+        containers:
+            - name: auth-app-container
+            image: supermendax95/kube-demo-auth:v1
+            imagePullPolicy: IfNotPresent
+
+    --- 
+
+    apiVersion: v1 
+    kind: Service 
+    metadata:
+    name: auth-app-service
+    spec:
+    selector: 
+        app: auth-app
+    type: ClusterIP
+    ports:
+        - protocol: 'TCP'
+        port: 80
+        targetPort: 80 
+    

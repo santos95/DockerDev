@@ -18,8 +18,12 @@ spec:
           image: supermendax95/kub-demo-users:v2
           imagePullPolicy: IfNotPresent
           env:
-            - name: AUTH_ADDRESS
-              value: localhost
+            - name: AUTH_ADDRESS 
+              #value: localhost - localhost when the communication is inside the same pod - ip address of the service when the communication is between pods
+              valueFrom:
+                configMapKeyRef:
+                  name: networking-env
+                  key: auth-ip-address
 
 --- 
 
@@ -35,3 +39,6 @@ spec:
       port: 8080
       targetPort: 8080 
   type: LoadBalancer
+
+
+  
