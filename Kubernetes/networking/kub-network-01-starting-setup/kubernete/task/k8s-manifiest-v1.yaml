@@ -16,6 +16,9 @@ spec:
         - name: tasks-app-container
           image: supermendax95/kub-demo-tasks:v1
           imagePullPolicy: IfNotPresent
+          volumeMounts:
+            - mountPath: /app/tasks
+              name: task-app-volume
           env: 
             - name: AUTH_ADDRESS
               valueFrom:
@@ -27,6 +30,11 @@ spec:
                 configMapKeyRef:
                   name: networking-env
                   key: tasks-folder
+      volumes: 
+        - name: task-app-volume
+          hostPath: 
+            path: /data
+            type: DirectoryOrCreate
 
 --- 
 

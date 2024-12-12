@@ -21,3 +21,8 @@
 
 ## start a bash session in the pods container
     kubectl exec -ti pod_name -- bash
+    kubectl exec -it tasks-app-deployment-7d4fbdb758-84tsc -- sh
+
+## to check events of the pod 
+    kubectl describe pod <pod-name>
+    kubectl describe pod tasks-app-deployment-7d4fbdb758-84tsc
