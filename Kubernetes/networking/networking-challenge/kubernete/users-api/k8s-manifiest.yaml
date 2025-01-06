@@ -1,0 +1,37 @@
+apiVersion: apps/v1 
+kind: Deployment
+metadata:
+  name: users-app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: users-app
+  template:
+    metadata:
+      labels:
+        app: users-app 
+    spec:
+      containers:
+        - name: users-app-container
+          image: supermendax95/kub-demo-users:v4
+          imagePullPolicy: IfNotPresent
+          env:
+            - name: AUTH_ADDRESS
+              value: auth-app-service
+
+--- 
+
+apiVersion: v1 
+kind: Service 
+metadata:
+  name: users-app-service
+spec:
+  selector: 
+    app: users-app
+  type: LoadBalancer
+  ports:
+    - protocol: 'TCP'
+      port: 8080
+      targetPort: 8080 
+  
